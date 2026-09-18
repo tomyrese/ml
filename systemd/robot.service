@@ -1,0 +1,19 @@
+[Unit]
+Description=Mall Robot Platform Service
+After=network.target
+
+[Service]
+Type=simple
+User=pi
+WorkingDirectory=/home/pi/robot-pi
+ExecStart=/home/pi/robot-pi/venv/bin/python3 -m src.main
+Restart=on-failure
+RestartSec=3
+KillSignal=SIGINT
+TimeoutStopSec=5
+StandardOutput=journal
+StandardError=journal
+Environment=PYTHONUNBUFFERED=1
+
+[Install]
+WantedBy=multi-user.target
