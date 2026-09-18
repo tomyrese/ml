@@ -23,7 +23,7 @@ export const SpeedSlider: React.FC<Props> = ({ currentSpeed, onSpeedChange, disa
       <View style={styles.headerRow}>
         <View style={styles.titleWrap}>
           <Text style={styles.label}>THROTTLE CONTROL</Text>
-          <Text style={styles.subLabel}>Mức Tốc Độ Động Cơ</Text>
+          <Text style={styles.subLabel}>Target Motor Output Speed</Text>
         </View>
         <View style={styles.badgeWrap}>
           <Text style={styles.speedValue}>{activePercent}%</Text>

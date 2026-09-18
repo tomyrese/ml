@@ -89,7 +89,7 @@ export const CameraPreview: React.FC<Props> = ({
       {loading ? (
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="small" color="#00E676" />
-          <Text style={styles.loadingText}>Đang tải camera CSI...</Text>
+          <Text style={styles.loadingText}>Loading CSI Camera Stream...</Text>
         </View>
       ) : (
         <WebView
@@ -109,7 +109,7 @@ export const CameraPreview: React.FC<Props> = ({
           </View>
           {personDetected && (
             <View style={styles.badgeRight}>
-              <Text style={styles.personWarningText}>⚠️ NGƯỜI PHÍA TRƯỚC</Text>
+              <Text style={styles.personWarningText}>PERSON DETECTED</Text>
             </View>
           )}
         </View>

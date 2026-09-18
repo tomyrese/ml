@@ -44,7 +44,7 @@ export const CameraScreen: React.FC = () => {
         </View>
       ) : (
         <View style={styles.noRobotBox}>
-          <Text style={styles.noRobotText}>Chưa có thông tin kết nối Robot.</Text>
+          <Text style={styles.noRobotText}>No paired robot connected.</Text>
         </View>
       )}
 

@@ -64,12 +64,12 @@ export const ControlScreen: React.FC<Props> = ({ navigation }) => {
 
   const handleResetEmergency = () => {
     Alert.alert(
-      'Xác Nhận Mở Khóa An Toàn',
-      'Bạn có chắc chắn khu vực xung quanh robot đã an toàn không có chướng ngại vật?',
+      'Confirm Safety Reset',
+      'Are you sure the area around the robot is clear of obstacles and hazards?',
       [
-        { text: 'Hủy', style: 'cancel' },
+        { text: 'Cancel', style: 'cancel' },
         {
-          text: 'Mở Khóa',
+          text: 'Reset Interlock',
           onPress: () => {
             RobotSocket.getInstance().sendEmergencyReset();
           },
@@ -142,7 +142,7 @@ export const ControlScreen: React.FC<Props> = ({ navigation }) => {
 
         {isEmergencyStopped && (
           <TouchableOpacity activeOpacity={0.8} style={styles.resetBtn} onPress={handleResetEmergency}>
-            <Text style={styles.resetBtnText}>🔄 MỞ KHÓA E-STOP (RESET)</Text>
+            <Text style={styles.resetBtnText}>RESET EMERGENCY STOP</Text>
           </TouchableOpacity>
         )}
       </View>

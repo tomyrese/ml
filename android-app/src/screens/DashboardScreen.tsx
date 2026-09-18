@@ -62,20 +62,20 @@ export const DashboardScreen: React.FC<Props> = ({ navigation }) => {
 
       <RobotStatusCard telemetry={telemetry} />
 
-      <Text style={styles.sectionTitle}>BẢNG ĐIỀU KHIỂN & CHỨC NĂNG</Text>
+      <Text style={styles.sectionTitle}>CONTROL PANELS & MODULES</Text>
       <View style={styles.menuGrid}>
         <TouchableOpacity
           activeOpacity={0.8}
           style={[styles.menuTile, styles.primaryTile]}
           onPress={() => navigation.navigate('Control')}>
           <View style={styles.tileHeader}>
-            <Text style={styles.tileIcon}>🎮</Text>
+            <Text style={styles.tileTagPrimary}>DRIVE</Text>
             <View style={styles.tileBadgePrimary}>
               <Text style={styles.tileBadgeText}>LIVE</Text>
             </View>
           </View>
-          <Text style={styles.tileTitle}>ĐIỀU KHIỂN</Text>
-          <Text style={styles.tileSubtitle}>D-pad, Tốc độ, Phanh an toàn</Text>
+          <Text style={styles.tileTitle}>DRIVE CONTROL</Text>
+          <Text style={styles.tileSubtitle}>D-Pad, Throttle & Safety Brake</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -83,13 +83,13 @@ export const DashboardScreen: React.FC<Props> = ({ navigation }) => {
           style={[styles.menuTile, styles.cameraTile]}
           onPress={() => navigation.navigate('Camera')}>
           <View style={styles.tileHeader}>
-            <Text style={styles.tileIcon}>📷</Text>
+            <Text style={styles.tileTagCyan}>VISION</Text>
             <View style={styles.tileBadgeCyan}>
               <Text style={styles.tileBadgeText}>CSI</Text>
             </View>
           </View>
-          <Text style={styles.tileTitle}>CAMERA CSI</Text>
-          <Text style={styles.tileSubtitle}>Video trực tiếp & AI Detector</Text>
+          <Text style={styles.tileTitle}>CSI CAMERA</Text>
+          <Text style={styles.tileSubtitle}>Live Stream & AI Detection</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -97,10 +97,10 @@ export const DashboardScreen: React.FC<Props> = ({ navigation }) => {
           style={styles.menuTile}
           onPress={() => navigation.navigate('Diagnostics')}>
           <View style={styles.tileHeader}>
-            <Text style={styles.tileIcon}>📊</Text>
+            <Text style={styles.tileTagDefault}>STATS</Text>
           </View>
-          <Text style={styles.tileTitle}>CHẨN ĐOÁN</Text>
-          <Text style={styles.tileSubtitle}>Telemetry chi tiết & Logs</Text>
+          <Text style={styles.tileTitle}>DIAGNOSTICS</Text>
+          <Text style={styles.tileSubtitle}>Detailed Telemetry & Logs</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -108,10 +108,10 @@ export const DashboardScreen: React.FC<Props> = ({ navigation }) => {
           style={styles.menuTile}
           onPress={() => navigation.navigate('MotorTest')}>
           <View style={styles.tileHeader}>
-            <Text style={styles.tileIcon}>🔧</Text>
+            <Text style={styles.tileTagDefault}>BENCH</Text>
           </View>
-          <Text style={styles.tileTitle}>TEST MOTOR</Text>
-          <Text style={styles.tileSubtitle}>Kiểm tra 4 motor DC độc lập</Text>
+          <Text style={styles.tileTitle}>MOTOR TEST</Text>
+          <Text style={styles.tileSubtitle}>Individual 4-Motor Diagnostics</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -119,10 +119,12 @@ export const DashboardScreen: React.FC<Props> = ({ navigation }) => {
           style={[styles.menuTile, styles.fullWidthTile]}
           onPress={() => navigation.navigate('Settings')}>
           <View style={styles.fullWidthContent}>
-            <Text style={styles.tileIconSmall}>⚙️</Text>
             <View style={styles.fullWidthTexts}>
-              <Text style={styles.tileTitle}>CÀI ĐẶT HỆ THỐNG</Text>
-              <Text style={styles.tileSubtitle}>Cấu hình kết nối, Tốc độ mặc định, Quản lý Robot</Text>
+              <View style={styles.settingsHeaderRow}>
+                <Text style={styles.tileTitle}>SETTINGS & CONFIGURATION</Text>
+                <Text style={styles.tileTagDefault}>PREFERENCES</Text>
+              </View>
+              <Text style={styles.tileSubtitle}>Connection, Speed & Device Configuration</Text>
             </View>
           </View>
         </TouchableOpacity>
@@ -203,14 +205,25 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 8,
+    marginBottom: 10,
   },
-  tileIcon: {
-    fontSize: 26,
+  tileTagPrimary: {
+    color: '#00E676',
+    fontSize: 10,
+    fontWeight: '900',
+    letterSpacing: 0.8,
   },
-  tileIconSmall: {
-    fontSize: 22,
-    marginRight: 10,
+  tileTagCyan: {
+    color: '#00E5FF',
+    fontSize: 10,
+    fontWeight: '900',
+    letterSpacing: 0.8,
+  },
+  tileTagDefault: {
+    color: '#8E8E93',
+    fontSize: 10,
+    fontWeight: '800',
+    letterSpacing: 0.8,
   },
   tileBadgePrimary: {
     backgroundColor: '#00E676',
@@ -238,12 +251,12 @@ const styles = StyleSheet.create({
   tileSubtitle: {
     color: '#8E8E93',
     fontSize: 11,
-    marginTop: 3,
+    marginTop: 4,
     lineHeight: 15,
   },
   fullWidthTile: {
     width: '100%',
-    paddingVertical: 12,
+    paddingVertical: 14,
   },
   fullWidthContent: {
     flexDirection: 'row',
@@ -251,6 +264,11 @@ const styles = StyleSheet.create({
   },
   fullWidthTexts: {
     flex: 1,
+  },
+  settingsHeaderRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   emergencySection: {
     marginTop: 18,

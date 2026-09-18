@@ -27,10 +27,10 @@ export const AppNavigator: React.FC = () => {
     <Stack.Navigator
       initialRouteName="Pair"
       screenOptions={{
-        headerStyle: { backgroundColor: '#1C1C1E' },
+        headerStyle: { backgroundColor: '#141822' },
         headerTintColor: '#00E676',
-        headerTitleStyle: { fontWeight: '800', fontSize: 16 },
-        contentStyle: { backgroundColor: '#0F0F12' },
+        headerTitleStyle: { fontWeight: 'bold', fontSize: 15 },
+        contentStyle: { backgroundColor: '#0A0D14' },
         animation: 'slide_from_right',
       }}>
       <Stack.Screen
@@ -46,32 +46,32 @@ export const AppNavigator: React.FC = () => {
       <Stack.Screen
         name="Dashboard"
         component={DashboardScreen}
-        options={{ title: 'BẢNG ĐIỀU KHIỂN ROBOT' }}
+        options={{ title: 'ROBOT DASHBOARD' }}
       />
       <Stack.Screen
         name="Control"
         component={ControlScreen}
-        options={{ title: 'ĐIỀU KHIỂN ROBOT' }}
+        options={{ title: 'DRIVE CONTROLLER' }}
       />
       <Stack.Screen
         name="Camera"
         component={CameraScreen}
-        options={{ title: 'CAMERA CSI TRỰC TIẾP' }}
+        options={{ title: 'LIVE CSI CAMERA' }}
       />
       <Stack.Screen
         name="MotorTest"
         component={MotorTestScreen}
-        options={{ title: 'KIỂM TRA ĐỘNG CƠ' }}
+        options={{ title: 'MOTOR DIAGNOSTICS' }}
       />
       <Stack.Screen
         name="Diagnostics"
         component={DiagnosticsScreen}
-        options={{ title: 'CHẨN ĐOÁN HỆ THỐNG' }}
+        options={{ title: 'SYSTEM TELEMETRY' }}
       />
       <Stack.Screen
         name="Settings"
         component={SettingsScreen}
-        options={{ title: 'CÀI ĐẶT' }}
+        options={{ title: 'SETTINGS' }}
       />
     </Stack.Navigator>
   );

@@ -23,8 +23,8 @@ export const SafetyBanner: React.FC<Props> = ({
   if (isEmergencyStopped || safetyState === 'ERROR_STOP') {
     return (
       <View style={[styles.banner, styles.dangerBanner]}>
-        <Text style={styles.bannerTitle}>🛑 DỪNG KHẨN CẤP (EMERGENCY ACTIVE)</Text>
-        <Text style={styles.bannerSubtitle}>Động cơ đã ngắt toàn bộ nguồn. Hãy reset sau khi khu vực an toàn.</Text>
+        <Text style={styles.bannerTitle}>EMERGENCY STOP ACTIVE</Text>
+        <Text style={styles.bannerSubtitle}>Motor power cut off completely. Reset after the hazard is clear.</Text>
       </View>
     );
   }
@@ -33,8 +33,8 @@ export const SafetyBanner: React.FC<Props> = ({
     const confPercent = Math.round(personConfidence * 100);
     return (
       <View style={[styles.banner, styles.warningBanner]}>
-        <Text style={styles.bannerTitle}>⚠️ PHÁT HIỆN NGƯỜI PHÍA TRƯỚC ({confPercent}%)</Text>
-        <Text style={styles.bannerSubtitle}>ROBOT ĐÃ TỰ ĐỘNG DỪNG. Khóa di chuyển an toàn đang kích hoạt.</Text>
+        <Text style={styles.bannerTitle}>PERSON DETECTED IN PATH ({confPercent}%)</Text>
+        <Text style={styles.bannerSubtitle}>Robot stopped automatically. Motion interlock active.</Text>
       </View>
     );
   }
@@ -42,8 +42,8 @@ export const SafetyBanner: React.FC<Props> = ({
   if (robotState === 'CAMERA_ERROR') {
     return (
       <View style={[styles.banner, styles.dangerBanner]}>
-        <Text style={styles.bannerTitle}>📷 LỖI CAMERA CSI AN TOÀN</Text>
-        <Text style={styles.bannerSubtitle}>Mất luồng camera an toàn. Khóa di chuyển robot tự động.</Text>
+        <Text style={styles.bannerTitle}>CSI CAMERA FEED ERROR</Text>
+        <Text style={styles.bannerSubtitle}>Safety camera stream lost. Automatic motion lock engaged.</Text>
       </View>
     );
   }
@@ -51,8 +51,8 @@ export const SafetyBanner: React.FC<Props> = ({
   if (connectionStatus !== 'CONNECTED') {
     return (
       <View style={[styles.banner, styles.disconnectedBanner]}>
-        <Text style={styles.bannerTitle}>📡 MẤT KẾT NỐI WEBSOCKET ROBOT</Text>
-        <Text style={styles.bannerSubtitle}>Robot đã dừng an toàn (Fail-Safe Stop). Đang chờ kết nối lại...</Text>
+        <Text style={styles.bannerTitle}>WEBSOCKET CONNECTION LOST</Text>
+        <Text style={styles.bannerSubtitle}>Fail-Safe stop engaged. Awaiting reconnection...</Text>
       </View>
     );
   }
@@ -60,7 +60,7 @@ export const SafetyBanner: React.FC<Props> = ({
   return (
     <View style={styles.clearBanner}>
       <View style={styles.clearDot} />
-      <Text style={styles.clearText}>HỆ THỐNG AN TOÀN SẴN SÀNG (ALL CLEAR)</Text>
+      <Text style={styles.clearText}>SAFETY SYSTEM OPERATIONAL (ALL CLEAR)</Text>
     </View>
   );
 };

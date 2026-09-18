@@ -49,7 +49,7 @@ export const DiagnosticsScreen: React.FC = () => {
         </View>
       </View>
 
-      <Text style={styles.sectionHeader}>TRẠNG THÁI HỆ THỐNG AN TOÀN</Text>
+      <Text style={styles.sectionHeader}>SAFETY SYSTEM STATUS</Text>
       <View style={styles.metricsRow}>
         <MetricCard
           title="ROBOT STATE"
@@ -63,7 +63,7 @@ export const DiagnosticsScreen: React.FC = () => {
         />
       </View>
 
-      <Text style={styles.sectionHeader}>PHẦN CỨNG & NHIỆT ĐỘ PI 4</Text>
+      <Text style={styles.sectionHeader}>HARDWARE & THERMAL TELEMETRY</Text>
       <View style={styles.metricsRow}>
         <MetricCard
           title="CPU TEMP"
@@ -83,7 +83,7 @@ export const DiagnosticsScreen: React.FC = () => {
         />
       </View>
 
-      <Text style={styles.sectionHeader}>THỊ GIÁC CSI & AI DETECTOR</Text>
+      <Text style={styles.sectionHeader}>CSI VISION & AI DETECTION</Text>
       <View style={styles.metricsRow}>
         <MetricCard
           title="CAMERA FPS"
@@ -97,12 +97,12 @@ export const DiagnosticsScreen: React.FC = () => {
         />
         <MetricCard
           title="SAFETY ZONE"
-          value={telemetry?.personDetected ? 'PHÁT HIỆN' : 'TRỐNG'}
+          value={telemetry?.personDetected ? 'DETECTED' : 'CLEAR'}
           statusColor={telemetry?.personDetected ? '#FF1744' : '#00E676'}
         />
       </View>
 
-      <Text style={styles.sectionHeader}>CÔNG SUẤT 4 ĐỘNG CƠ (TB6612FNG)</Text>
+      <Text style={styles.sectionHeader}>MOTOR POWER OUTPUTS (TB6612FNG)</Text>
       <View style={styles.metricsRow}>
         <MetricCard title="M1 (L-FWD)" value={`${Math.round((telemetry?.m1 || 0) * 100)}%`} />
         <MetricCard title="M2 (L-REV)" value={`${Math.round((telemetry?.m2 || 0) * 100)}%`} />
@@ -110,26 +110,26 @@ export const DiagnosticsScreen: React.FC = () => {
         <MetricCard title="M4 (R-REV)" value={`${Math.round((telemetry?.m4 || 0) * 100)}%`} />
       </View>
 
-      <Text style={styles.sectionHeader}>THÔNG TIN KẾT NỐI MẠNG</Text>
+      <Text style={styles.sectionHeader}>NETWORK & SYSTEM METADATA</Text>
       <View style={styles.infoCard}>
         <View style={styles.infoRow}>
-          <Text style={styles.infoKey}>Robot ID / Tên:</Text>
+          <Text style={styles.infoKey}>Robot ID / Name:</Text>
           <Text style={styles.infoVal}>{pairedRobot?.robotName || 'Pi Robot'} ({pairedRobot?.robotId || 'RBT01'})</Text>
         </View>
         <View style={styles.infoRow}>
-          <Text style={styles.infoKey}>IP Server LAN:</Text>
+          <Text style={styles.infoKey}>Server LAN IP:</Text>
           <Text style={styles.infoVal}>{pairedRobot?.host || '--'}:{pairedRobot?.port || 8765}</Text>
         </View>
         <View style={styles.infoRow}>
-          <Text style={styles.infoKey}>Giao Thức Điều Khiển:</Text>
+          <Text style={styles.infoKey}>Control Protocol:</Text>
           <Text style={styles.infoVal}>P1 WebSocket (350ms Lease)</Text>
         </View>
       </View>
 
-      <Text style={styles.sectionHeader}>NHẬT KÝ HỆ THỐNG (SYSTEM EVENT LOG)</Text>
+      <Text style={styles.sectionHeader}>SYSTEM EVENT LOGS</Text>
       <View style={styles.logBox}>
         {displayLogs.length === 0 ? (
-          <Text style={styles.emptyLog}>Chưa có log mới</Text>
+          <Text style={styles.emptyLog}>No recent log entries</Text>
         ) : (
           displayLogs.map((item, idx) => (
             <Text key={idx} style={styles.logLine}>

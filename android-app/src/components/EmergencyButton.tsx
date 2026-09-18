@@ -19,8 +19,8 @@ export const EmergencyButton: React.FC<Props> = ({ onPress, disabled = false }) 
         <View style={styles.hazardBar} />
       </View>
       <View style={styles.innerGlow}>
-        <Text style={styles.buttonText}>🛑 EMERGENCY STOP</Text>
-        <Text style={styles.subText}>NGẮT ĐIỆN VÀ PHANH KHẨN CẤP</Text>
+        <Text style={styles.buttonText}>EMERGENCY STOP</Text>
+        <Text style={styles.subText}>CUT POWER AND INSTANT BRAKE</Text>
       </View>
     </TouchableOpacity>
   );

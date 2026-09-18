@@ -11,7 +11,7 @@ export const ConnectionBadge: React.FC<Props> = ({ status, robotName = 'Pi Robot
   let bgColor = '#141820';
   let borderColor = '#242B38';
   let dotColor = '#777777';
-  let label = 'MẤT KẾT NỐI';
+  let label = 'DISCONNECTED';
 
   if (status === 'CONNECTED') {
     bgColor = '#0A2518';
@@ -27,7 +27,7 @@ export const ConnectionBadge: React.FC<Props> = ({ status, robotName = 'Pi Robot
     bgColor = '#250A0E';
     borderColor = '#FF1744';
     dotColor = '#FF1744';
-    label = 'LỖI KẾT NỐI';
+    label = 'CONNECTION ERROR';
   }
 
   return (

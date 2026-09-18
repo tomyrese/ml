@@ -41,7 +41,7 @@ export const ControlPad: React.FC<Props> = ({
             onPressIn={() => handlePressIn('forward')}
             onPressOut={handlePressOut}>
             <Text style={[styles.arrowIcon, activeDir === 'forward' && styles.arrowActive]}>▲</Text>
-            <Text style={[styles.dirText, activeDir === 'forward' && styles.textActive]}>TIẾN</Text>
+            <Text style={[styles.dirText, activeDir === 'forward' && styles.textActive]}>FORWARD</Text>
           </TouchableOpacity>
         </View>
 
@@ -57,7 +57,7 @@ export const ControlPad: React.FC<Props> = ({
             onPressIn={() => handlePressIn('left')}
             onPressOut={handlePressOut}>
             <Text style={[styles.arrowIcon, activeDir === 'left' && styles.arrowActive]}>◀</Text>
-            <Text style={[styles.dirText, activeDir === 'left' && styles.textActive]}>TRÁI</Text>
+            <Text style={[styles.dirText, activeDir === 'left' && styles.textActive]}>LEFT</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -82,7 +82,7 @@ export const ControlPad: React.FC<Props> = ({
             onPressIn={() => handlePressIn('right')}
             onPressOut={handlePressOut}>
             <Text style={[styles.arrowIcon, activeDir === 'right' && styles.arrowActive]}>▶</Text>
-            <Text style={[styles.dirText, activeDir === 'right' && styles.textActive]}>PHẢI</Text>
+            <Text style={[styles.dirText, activeDir === 'right' && styles.textActive]}>RIGHT</Text>
           </TouchableOpacity>
         </View>
 
@@ -98,7 +98,7 @@ export const ControlPad: React.FC<Props> = ({
             onPressIn={() => handlePressIn('backward')}
             onPressOut={handlePressOut}>
             <Text style={[styles.arrowIcon, activeDir === 'backward' && styles.arrowActive]}>▼</Text>
-            <Text style={[styles.dirText, activeDir === 'backward' && styles.textActive]}>LÙI</Text>
+            <Text style={[styles.dirText, activeDir === 'backward' && styles.textActive]}>BACKWARD</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -139,8 +139,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   dirBtn: {
-    width: 76,
-    height: 76,
+    width: 78,
+    height: 78,
     borderRadius: 20,
     backgroundColor: '#1B212D',
     borderWidth: 1.5,
@@ -155,7 +155,7 @@ const styles = StyleSheet.create({
     elevation: 8,
   },
   arrowIcon: {
-    fontSize: 24,
+    fontSize: 22,
     color: '#00E5FF',
     fontWeight: '900',
   },
@@ -163,7 +163,7 @@ const styles = StyleSheet.create({
     color: '#000000',
   },
   dirText: {
-    fontSize: 10,
+    fontSize: 9,
     color: '#ECEFF1',
     fontWeight: '800',
     marginTop: 2,
@@ -173,9 +173,9 @@ const styles = StyleSheet.create({
     color: '#000000',
   },
   stopBtn: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
+    width: 78,
+    height: 78,
+    borderRadius: 39,
     backgroundColor: '#3E1017',
     borderWidth: 2,
     borderColor: '#FF1744',
@@ -188,12 +188,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   stopIcon: {
-    fontSize: 20,
+    fontSize: 18,
     color: '#FF1744',
     fontWeight: '900',
   },
   stopText: {
-    fontSize: 11,
+    fontSize: 10,
     color: '#FFFFFF',
     fontWeight: '900',
     letterSpacing: 0.5,

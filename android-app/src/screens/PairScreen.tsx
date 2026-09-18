@@ -49,13 +49,13 @@ export const PairScreen: React.FC<Props> = ({ navigation }) => {
       RobotSocket.getInstance().connect(target.host, target.port || 8765, target.token);
       navigation.navigate('Dashboard');
     } else {
-      setErrorMessage('Chưa có thông tin robot đã ghép nối. Vui lòng quét mã QR trên OLED.');
+      setErrorMessage('No paired robot data found. Please scan the QR code on OLED.');
     }
   };
 
   const handleManualPair = async () => {
     if (!host.trim() || !pairCode.trim()) {
-      setErrorMessage('Vui lòng nhập IP và mã ghép nối.');
+      setErrorMessage('Please enter both IP address and pairing code.');
       return;
     }
 
@@ -83,10 +83,10 @@ export const PairScreen: React.FC<Props> = ({ navigation }) => {
         setModalVisible(false);
         navigation.navigate('Dashboard');
       } else {
-        setErrorMessage(res.message || 'Mã ghép nối không hợp lệ hoặc đã hết hạn.');
+        setErrorMessage(res.message || 'Invalid or expired pairing code.');
       }
     } catch (e: any) {
-      setErrorMessage(`Không thể kết nối: ${e.message}`);
+      setErrorMessage(`Connection failed: ${e.message}`);
     } finally {
       setLoading(false);
     }
@@ -104,7 +104,7 @@ export const PairScreen: React.FC<Props> = ({ navigation }) => {
 
       <View style={styles.card}>
         <View style={styles.cardHeader}>
-          <Text style={styles.cardTitle}>HỆ THỐNG GHÉP NỐI AN TOÀN</Text>
+          <Text style={styles.cardTitle}>SECURE PAIRING SYSTEM</Text>
           <View style={[
             styles.statusPill,
             connectionStatus === 'CONNECTED' ? styles.statusOnline : styles.statusOffline
@@ -115,7 +115,7 @@ export const PairScreen: React.FC<Props> = ({ navigation }) => {
 
         {pairedRobot ? (
           <View style={styles.pairedInfo}>
-            <Text style={styles.infoLabel}>Robot Đã Ghép Nối Trước Đó:</Text>
+            <Text style={styles.infoLabel}>Previously Paired Robot:</Text>
             <Text style={styles.infoValue}>
               {pairedRobot.robotName}
             </Text>
@@ -125,7 +125,7 @@ export const PairScreen: React.FC<Props> = ({ navigation }) => {
           </View>
         ) : (
           <Text style={styles.emptyInfo}>
-            Chưa ghép nối thiết bị. Hãy quét mã QR đang hiển thị trên màn hình OLED 1.3" của Robot.
+            No robot paired. Scan the QR code displayed on the Robot 1.3" OLED screen to pair.
           </Text>
         )}
       </View>
@@ -138,30 +138,30 @@ export const PairScreen: React.FC<Props> = ({ navigation }) => {
 
       <View style={styles.actions}>
         <TouchableOpacity activeOpacity={0.8} style={styles.primaryBtn} onPress={handleScanPress}>
-          <Text style={styles.primaryBtnText}>📷 QUÉT MÃ QR TRÊN OLED</Text>
+          <Text style={styles.primaryBtnText}>SCAN QR CODE ON OLED</Text>
         </TouchableOpacity>
 
         {pairedRobot && (
           <TouchableOpacity activeOpacity={0.8} style={styles.secondaryBtn} onPress={handleReconnect}>
-            <Text style={styles.secondaryBtnText}>🔄 KẾT NỐI LẠI NGAY</Text>
+            <Text style={styles.secondaryBtnText}>RECONNECT</Text>
           </TouchableOpacity>
         )}
 
         <TouchableOpacity
           style={styles.textBtn}
           onPress={() => setModalVisible(true)}>
-          <Text style={styles.textBtnLabel}>Nhập IP & Mã Ghép Nối Thủ Công</Text>
+          <Text style={styles.textBtnLabel}>Manual IP & Pairing Code Entry</Text>
         </TouchableOpacity>
       </View>
 
       <Modal visible={modalVisible} transparent animationType="slide">
         <View style={styles.modalBackdrop}>
           <View style={styles.modalCard}>
-            <Text style={styles.modalTitle}>GHÉP NỐI THỦ CÔNG</Text>
+            <Text style={styles.modalTitle}>MANUAL PAIRING</Text>
 
             {errorMessage ? <Text style={styles.errorText}>{errorMessage}</Text> : null}
 
-            <Text style={styles.inputLabel}>Địa Chỉ IPv4 Robot</Text>
+            <Text style={styles.inputLabel}>Robot IPv4 Address</Text>
             <TextInput
               style={styles.input}
               placeholder="192.168.1.50"
@@ -171,7 +171,7 @@ export const PairScreen: React.FC<Props> = ({ navigation }) => {
               autoCapitalize="none"
             />
 
-            <Text style={styles.inputLabel}>Cổng Server (Port)</Text>
+            <Text style={styles.inputLabel}>Server Port</Text>
             <TextInput
               style={styles.input}
               placeholder="8765"
@@ -181,7 +181,7 @@ export const PairScreen: React.FC<Props> = ({ navigation }) => {
               keyboardType="number-pad"
             />
 
-            <Text style={styles.inputLabel}>Mã Ghép Nối (Pairing Code)</Text>
+            <Text style={styles.inputLabel}>Pairing Code</Text>
             <TextInput
               style={styles.input}
               placeholder="A7K39P"
@@ -195,7 +195,7 @@ export const PairScreen: React.FC<Props> = ({ navigation }) => {
               <TouchableOpacity
                 style={styles.cancelBtn}
                 onPress={() => setModalVisible(false)}>
-                <Text style={styles.cancelBtnText}>HỦY</Text>
+                <Text style={styles.cancelBtnText}>CANCEL</Text>
               </TouchableOpacity>
 
               <TouchableOpacity
@@ -205,7 +205,7 @@ export const PairScreen: React.FC<Props> = ({ navigation }) => {
                 {loading ? (
                   <ActivityIndicator color="#000" />
                 ) : (
-                  <Text style={styles.confirmBtnText}>KẾT NỐI</Text>
+                  <Text style={styles.confirmBtnText}>CONNECT</Text>
                 )}
               </TouchableOpacity>
             </View>

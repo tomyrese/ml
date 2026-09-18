@@ -11,10 +11,10 @@ import { RobotSocket } from '../services/RobotSocket';
 import { ConnectionBadge } from '../components/ConnectionBadge';
 
 const MOTORS = [
-  { id: 1, name: 'Motor 1 (Trái Trước)', channel: 'TB_L Channel A', pin: 'GPIO13 / GPIO5,6' },
-  { id: 2, name: 'Motor 2 (Trái Sau)', channel: 'TB_L Channel B', pin: 'GPIO19 / GPIO26,22' },
-  { id: 3, name: 'Motor 3 (Phải Trước)', channel: 'TB_R Channel A', pin: 'GPIO12 / GPIO16,20' },
-  { id: 4, name: 'Motor 4 (Phải Sau)', channel: 'TB_R Channel B', pin: 'GPIO18 / GPIO23,24' },
+  { id: 1, name: 'Motor 1 (Front Left)', channel: 'TB_L Channel A', pin: 'GPIO13 / GPIO5,6' },
+  { id: 2, name: 'Motor 2 (Rear Left)', channel: 'TB_L Channel B', pin: 'GPIO19 / GPIO26,22' },
+  { id: 3, name: 'Motor 3 (Front Right)', channel: 'TB_R Channel A', pin: 'GPIO12 / GPIO16,20' },
+  { id: 4, name: 'Motor 4 (Rear Right)', channel: 'TB_R Channel B', pin: 'GPIO18 / GPIO23,24' },
 ];
 
 export const MotorTestScreen: React.FC = () => {
@@ -46,10 +46,10 @@ export const MotorTestScreen: React.FC = () => {
       </View>
 
       <View style={styles.warningBox}>
-        <Text style={styles.warningTitle}>⚠️ CHẾ ĐỘ BẢO TRÌ & KIỂM TRA ĐỘNG CƠ</Text>
+        <Text style={styles.warningTitle}>MOTOR BENCH TEST MODE</Text>
         <Text style={styles.warningDesc}>
-          Chỉ thực hiện khi robot đã được kê bánh lên không chạm đất để kiểm tra chiều quay từng
-          động cơ (Tốc độ test cố định 20%). Nhấn giữ để quay, thả tay để dừng.
+          Perform only when robot wheels are elevated off the ground. Test rotation direction
+          (20% fixed speed). Press and hold to spin, release to stop.
         </Text>
       </View>
 
@@ -87,7 +87,7 @@ export const MotorTestScreen: React.FC = () => {
                 disabled={isDisabled}
                 onPressIn={() => handleMotorPress(m.id, 0.20)}
                 onPressOut={() => handleMotorRelease(m.id)}>
-                <Text style={styles.fwBtnText}>▲ QUAY TIẾN (FWD)</Text>
+                <Text style={styles.fwBtnText}>FORWARD (FWD)</Text>
               </TouchableOpacity>
 
               <TouchableOpacity
@@ -96,7 +96,7 @@ export const MotorTestScreen: React.FC = () => {
                 disabled={isDisabled}
                 onPressIn={() => handleMotorPress(m.id, -0.20)}
                 onPressOut={() => handleMotorRelease(m.id)}>
-                <Text style={styles.revBtnText}>▼ QUAY LÙI (REV)</Text>
+                <Text style={styles.revBtnText}>REVERSE (REV)</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -108,7 +108,7 @@ export const MotorTestScreen: React.FC = () => {
         style={[styles.stopAllBtn, isDisabled && styles.disabledBtn]}
         disabled={isDisabled}
         onPress={handleStopAll}>
-        <Text style={styles.stopAllText}>🛑 DỪNG TẤT CẢ MOTOR</Text>
+        <Text style={styles.stopAllText}>STOP ALL MOTORS</Text>
       </TouchableOpacity>
     </ScrollView>
   );

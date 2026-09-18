@@ -44,8 +44,8 @@ export const QrScannerScreen: React.FC<Props> = ({ navigation }) => {
 
     const parsed = parsePairingPayload(rawCode);
     if (!parsed) {
-      Alert.alert('Mã QR Không Hợp Lệ', 'Mã QR trên OLED robot phải có định dạng P1|HOST|PORT|CODE', [
-        { text: 'Thử lại', onPress: () => setScanned(false) },
+      Alert.alert('Invalid QR Code', 'Robot QR code format must be P1|HOST|PORT|CODE', [
+        { text: 'Retry', onPress: () => setScanned(false) },
       ]);
       return;
     }
@@ -73,13 +73,13 @@ export const QrScannerScreen: React.FC<Props> = ({ navigation }) => {
           routes: [{ name: 'Dashboard' }],
         });
       } else {
-        Alert.alert('Ghép Nối Thất Bại', res.message || 'Mã ghép nối đã hết hạn hoặc không đúng.', [
-          { text: 'Thử lại', onPress: () => setScanned(false) },
+        Alert.alert('Pairing Failed', res.message || 'Pairing code expired or invalid.', [
+          { text: 'Retry', onPress: () => setScanned(false) },
         ]);
       }
     } catch (e: any) {
-      Alert.alert('Lỗi Kết Nối', `Không thể kết nối đến robot: ${e.message}`, [
-        { text: 'Thử lại', onPress: () => setScanned(false) },
+      Alert.alert('Connection Error', `Unable to connect to robot: ${e.message}`, [
+        { text: 'Retry', onPress: () => setScanned(false) },
       ]);
     } finally {
       setLoading(false);
@@ -98,12 +98,12 @@ export const QrScannerScreen: React.FC<Props> = ({ navigation }) => {
   if (!hasPermission) {
     return (
       <View style={styles.centerContainer}>
-        <Text style={styles.permissionText}>Cần cấp quyền Camera để quét mã QR trên màn hình OLED.</Text>
+        <Text style={styles.permissionText}>Camera permission required to scan OLED QR code.</Text>
         <TouchableOpacity style={styles.permBtn} onPress={requestPermission}>
-          <Text style={styles.permBtnText}>CẤP QUYỀN CAMERA</Text>
+          <Text style={styles.permBtnText}>GRANT CAMERA PERMISSION</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.backBtn} onPress={() => navigation.goBack()}>
-          <Text style={styles.backBtnText}>QUAY LẠI</Text>
+          <Text style={styles.backBtnText}>GO BACK</Text>
         </TouchableOpacity>
       </View>
     );
@@ -112,9 +112,9 @@ export const QrScannerScreen: React.FC<Props> = ({ navigation }) => {
   if (!device) {
     return (
       <View style={styles.centerContainer}>
-        <Text style={styles.permissionText}>Không tìm thấy Camera sau trên thiết bị.</Text>
+        <Text style={styles.permissionText}>Back camera device not found.</Text>
         <TouchableOpacity style={styles.backBtn} onPress={() => navigation.goBack()}>
-          <Text style={styles.backBtnText}>QUAY LẠI</Text>
+          <Text style={styles.backBtnText}>GO BACK</Text>
         </TouchableOpacity>
       </View>
     );
@@ -137,7 +137,7 @@ export const QrScannerScreen: React.FC<Props> = ({ navigation }) => {
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.iconBtn} onPress={() => setTorch(!torch)}>
-            <Text style={styles.iconText}>{torch ? '🔦 TẮT ĐÈN' : '💡 BẬT ĐÈN'}</Text>
+            <Text style={styles.iconText}>{torch ? 'TORCH OFF' : 'TORCH ON'}</Text>
           </TouchableOpacity>
         </View>
 
@@ -148,13 +148,13 @@ export const QrScannerScreen: React.FC<Props> = ({ navigation }) => {
             <View style={[styles.corner, styles.bl]} />
             <View style={[styles.corner, styles.br]} />
           </View>
-          <Text style={styles.instructionText}>Hướng camera vào mã QR trên màn hình OLED của Robot</Text>
+          <Text style={styles.instructionText}>Align camera with the QR code on the Robot OLED</Text>
         </View>
 
         {loading && (
           <View style={styles.loadingOverlay}>
             <ActivityIndicator size="large" color="#00E676" />
-            <Text style={styles.loadingText}>Đang xác thực ghép nối...</Text>
+            <Text style={styles.loadingText}>Authenticating pairing code...</Text>
           </View>
         )}
       </View>

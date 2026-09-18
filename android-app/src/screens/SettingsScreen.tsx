@@ -44,12 +44,12 @@ export const SettingsScreen: React.FC<Props> = ({ navigation }) => {
 
   const handleForgetRobot = () => {
     Alert.alert(
-      'Xác Nhận Hủy Ghép Nối',
-      'Bạn có chắc chắn muốn xóa thông tin robot này và đăng xuất khỏi hệ thống điều khiển?',
+      'Confirm Unpairing',
+      'Are you sure you want to remove paired robot credentials and return to setup?',
       [
-        { text: 'Hủy', style: 'cancel' },
+        { text: 'Cancel', style: 'cancel' },
         {
-          text: 'Hủy Ghép Nối',
+          text: 'Forget Robot',
           style: 'destructive',
           onPress: async () => {
             if (pairedRobot) {
@@ -79,13 +79,13 @@ export const SettingsScreen: React.FC<Props> = ({ navigation }) => {
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
       <View style={styles.logoHeader}>
         <RobotLogo size={52} />
-        <Text style={styles.settingsTitle}>CẤU HÌNH THIẾT BỊ</Text>
+        <Text style={styles.settingsTitle}>DEVICE SETTINGS</Text>
         <Text style={styles.settingsSub}>Pi Robot System Preferences</Text>
       </View>
 
-      <Text style={styles.sectionHeader}>CẤU HÌNH ĐIỀU KHIỂN & TỐC ĐỘ</Text>
+      <Text style={styles.sectionHeader}>CONTROL & THROTTLE PREFERENCES</Text>
       <View style={styles.card}>
-        <Text style={styles.cardLabel}>Tốc Độ Khởi Đầu Mặc Định</Text>
+        <Text style={styles.cardLabel}>Default Initial Speed</Text>
         <View style={styles.speedRow}>
           {[0.2, 0.35, 0.5, 0.75].map(spd => {
             const isSelected = Math.abs(settings.defaultSpeed - spd) < 0.02;
@@ -109,7 +109,7 @@ export const SettingsScreen: React.FC<Props> = ({ navigation }) => {
         <View style={styles.switchRow}>
           <View style={styles.switchTextWrap}>
             <Text style={styles.switchLabel}>Mini Camera Preview</Text>
-            <Text style={styles.switchSub}>Hiển thị video CSI thu nhỏ trên màn hình điều khiển</Text>
+            <Text style={styles.switchSub}>Show live CSI thumbnail on control screen</Text>
           </View>
           <Switch
             value={settings.enableCameraPreview}
@@ -123,8 +123,8 @@ export const SettingsScreen: React.FC<Props> = ({ navigation }) => {
 
         <View style={styles.switchRow}>
           <View style={styles.switchTextWrap}>
-            <Text style={styles.switchLabel}>Tự Động Kết Nối Lại</Text>
-            <Text style={styles.switchSub}>Tự reconnect khi mất sóng Wi-Fi tạm thời</Text>
+            <Text style={styles.switchLabel}>Auto-Reconnect</Text>
+            <Text style={styles.switchSub}>Automatically reconnect if Wi-Fi connection drops</Text>
           </View>
           <Switch
             value={settings.autoReconnect}
@@ -135,31 +135,31 @@ export const SettingsScreen: React.FC<Props> = ({ navigation }) => {
         </View>
       </View>
 
-      <Text style={styles.sectionHeader}>ROBOT ĐANG KẾT NỐI</Text>
+      <Text style={styles.sectionHeader}>PAIRED ROBOT INFORMATION</Text>
       <View style={styles.card}>
         <View style={styles.infoRow}>
-          <Text style={styles.infoKey}>Tên Robot:</Text>
-          <Text style={styles.infoVal}>{pairedRobot?.robotName || 'Chưa ghép nối'}</Text>
+          <Text style={styles.infoKey}>Robot Name:</Text>
+          <Text style={styles.infoVal}>{pairedRobot?.robotName || 'Not paired'}</Text>
         </View>
         <View style={styles.infoRow}>
           <Text style={styles.infoKey}>Robot ID:</Text>
           <Text style={styles.infoVal}>{pairedRobot?.robotId || 'RBT01'}</Text>
         </View>
         <View style={styles.infoRow}>
-          <Text style={styles.infoKey}>Địa Chỉ IP Server:</Text>
+          <Text style={styles.infoKey}>Server IP Address:</Text>
           <Text style={styles.infoVal}>{pairedRobot?.host || '--'}</Text>
         </View>
         <View style={styles.infoRow}>
-          <Text style={styles.infoKey}>Cổng Port:</Text>
+          <Text style={styles.infoKey}>Server Port:</Text>
           <Text style={styles.infoVal}>{pairedRobot?.port || 8765}</Text>
         </View>
 
         <TouchableOpacity activeOpacity={0.8} style={styles.forgetBtn} onPress={handleForgetRobot}>
-          <Text style={styles.forgetBtnText}>🗑️ HỦY GHÉP NỐI & XÓA TOKEN</Text>
+          <Text style={styles.forgetBtnText}>FORGET ROBOT & CLEAR TOKEN</Text>
         </TouchableOpacity>
       </View>
 
-      <Text style={styles.sectionHeader}>THÔNG TIN ỨNG DỤNG</Text>
+      <Text style={styles.sectionHeader}>ABOUT APPLICATION</Text>
       <View style={styles.card}>
         <Text style={styles.aboutText}>Pi Robot Controller v1.0.0 (Phase 2)</Text>
         <Text style={styles.aboutSub}>Framework: React Native CLI 0.76 (Android Native)</Text>

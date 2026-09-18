@@ -40,7 +40,7 @@ export const RobotStatusCard: React.FC<Props> = ({ telemetry }) => {
         <View style={styles.item}>
           <Text style={styles.label}>CAM FPS</Text>
           <Text style={styles.value}>{camFps}</Text>
-          <Text style={styles.unit}>CSI 30 FPS Target</Text>
+          <Text style={styles.unit}>CSI Target</Text>
         </View>
 
         <View style={styles.item}>
@@ -74,7 +74,7 @@ export const RobotStatusCard: React.FC<Props> = ({ telemetry }) => {
               styles.value,
               telemetry?.personDetected ? styles.personAlert : styles.clearText,
             ]}>
-            {telemetry?.personDetected ? 'PHÁT HIỆN' : 'AN TOÀN'}
+            {telemetry?.personDetected ? 'DETECTED' : 'CLEAR'}
           </Text>
           <Text style={styles.unit}>Safety Stop Zone</Text>
         </View>
@@ -84,19 +84,19 @@ export const RobotStatusCard: React.FC<Props> = ({ telemetry }) => {
         <Text style={styles.motorTitle}>MOTOR DRIVER OUTPUTS (TB6612FNG)</Text>
         <View style={styles.motorGrid}>
           <View style={styles.motorTile}>
-            <Text style={styles.motorLabel}>M1 (TRƯỚC TRÁI)</Text>
+            <Text style={styles.motorLabel}>M1 (FRONT LEFT)</Text>
             <Text style={styles.motorVal}>{m1}</Text>
           </View>
           <View style={styles.motorTile}>
-            <Text style={styles.motorLabel}>M3 (TRƯỚC PHẢI)</Text>
+            <Text style={styles.motorLabel}>M3 (FRONT RIGHT)</Text>
             <Text style={styles.motorVal}>{m3}</Text>
           </View>
           <View style={styles.motorTile}>
-            <Text style={styles.motorLabel}>M2 (SAU TRÁI)</Text>
+            <Text style={styles.motorLabel}>M2 (REAR LEFT)</Text>
             <Text style={styles.motorVal}>{m2}</Text>
           </View>
           <View style={styles.motorTile}>
-            <Text style={styles.motorLabel}>M4 (SAU PHẢI)</Text>
+            <Text style={styles.motorLabel}>M4 (REAR RIGHT)</Text>
             <Text style={styles.motorVal}>{m4}</Text>
           </View>
         </View>
