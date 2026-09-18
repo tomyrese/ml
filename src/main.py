@@ -23,7 +23,7 @@ def get_key_reader():
         import select
         if not sys.stdin.isatty():
             def dummy_reader():
-                time.sleep(0.5)
+                time.sleep(0.2)
                 return None
             return dummy_reader
 
@@ -40,8 +40,14 @@ def main():
 
     def handle_signal(sig, frame):
         nonlocal shutdown_requested
-        logger.warning(f"Received signal {sig}, initiating clean shutdown...")
+        if shutdown_requested:
+            os._exit(0)
         shutdown_requested = True
+        logger.warning(f"Received signal {sig}, initiating clean shutdown...")
+        try:
+            robot.shutdown()
+        finally:
+            os._exit(0)
 
     signal.signal(signal.SIGINT, handle_signal)
     signal.signal(signal.SIGTERM, handle_signal)

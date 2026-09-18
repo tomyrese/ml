@@ -417,14 +417,26 @@ class RobotController:
     def shutdown(self):
         logger.info("Shutting down RobotController...")
         self.running = False
-        if self.loop_thread and self.loop_thread.is_alive():
-            self.loop_thread.join(timeout=1.0)
+        self.motor.emergency_stop()
+        self.motor.cleanup()
 
         if self.uvicorn_server is not None:
             self.uvicorn_server.should_exit = True
 
+        if self.async_loop and self.async_loop.is_running():
+            try:
+                self.async_loop.call_soon_threadsafe(self.async_loop.stop)
+            except Exception:
+                pass
+
+        if self.loop_thread and self.loop_thread.is_alive():
+            self.loop_thread.join(timeout=0.2)
+
         self.state = RobotState.SHUTTING_DOWN
-        self.motor.cleanup()
         self.camera.stop()
         self.oled.cleanup()
+
+        if self.server_thread and self.server_thread.is_alive():
+            self.server_thread.join(timeout=0.2)
+
         logger.info("RobotController clean shutdown completed")

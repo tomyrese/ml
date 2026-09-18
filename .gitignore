@@ -20,3 +20,5 @@ android-app/.idea/
 android-app/.gradle/
 android-app/npm-debug.log
 android-app/yarn-error.log
+
+.paired_tokens.json

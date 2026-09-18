@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -27,14 +27,28 @@ export const PairScreen: React.FC<Props> = ({ navigation }) => {
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
+  useEffect(() => {
+    StorageService.getPairedRobot().then(robot => {
+      if (robot) {
+        updateGlobalState(() => ({ pairedRobot: robot }));
+        setHost(robot.host);
+        setPort(robot.port ? robot.port.toString() : '8765');
+      }
+    });
+  }, []);
+
   const handleScanPress = () => {
     navigation.navigate('QrScanner');
   };
 
-  const handleReconnect = () => {
-    if (pairedRobot) {
-      RobotSocket.getInstance().connect(pairedRobot.host, pairedRobot.port, pairedRobot.token);
+  const handleReconnect = async () => {
+    setErrorMessage('');
+    const target = pairedRobot || (await StorageService.getPairedRobot());
+    if (target && target.host && target.token) {
+      RobotSocket.getInstance().connect(target.host, target.port || 8765, target.token);
       navigation.navigate('Dashboard');
+    } else {
+      setErrorMessage('Chưa có thông tin robot đã ghép nối. Vui lòng quét mã QR trên OLED.');
     }
   };
 
@@ -98,6 +112,12 @@ export const PairScreen: React.FC<Props> = ({ navigation }) => {
           </View>
         )}
       </View>
+
+      {errorMessage ? (
+        <View style={styles.errorBanner}>
+          <Text style={styles.errorBannerText}>{errorMessage}</Text>
+        </View>
+      ) : null}
 
       <View style={styles.actions}>
         <TouchableOpacity style={styles.primaryBtn} onPress={handleScanPress}>
@@ -243,6 +263,20 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '700',
     marginTop: 2,
+  },
+  errorBanner: {
+    backgroundColor: 'rgba(255, 23, 68, 0.15)',
+    borderColor: '#FF1744',
+    borderWidth: 1,
+    borderRadius: 10,
+    padding: 12,
+    marginBottom: 16,
+  },
+  errorBannerText: {
+    color: '#FF5252',
+    fontSize: 13,
+    textAlign: 'center',
+    fontWeight: '600',
   },
   actions: {
     gap: 12,

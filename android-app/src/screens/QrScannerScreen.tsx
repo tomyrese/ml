@@ -200,14 +200,18 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   overlay: {
-    flex: 1,
-    justifyContent: 'space-between',
-    padding: 20,
+    ...StyleSheet.absoluteFillObject,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   headerRow: {
+    position: 'absolute',
+    top: 40,
+    left: 20,
+    right: 20,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: 20,
+    zIndex: 10,
   },
   iconBtn: {
     backgroundColor: 'rgba(0,0,0,0.6)',
@@ -224,6 +228,7 @@ const styles = StyleSheet.create({
   },
   scannerCenter: {
     alignItems: 'center',
+    justifyContent: 'center',
   },
   targetFrame: {
     width: 240,
