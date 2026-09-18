@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 
 interface Props {
@@ -14,125 +14,191 @@ export const ControlPad: React.FC<Props> = ({
   onStopPress,
   disabled = false,
 }) => {
+  const [activeDir, setActiveDir] = useState<string | null>(null);
+
+  const handlePressIn = (dir: 'forward' | 'backward' | 'left' | 'right') => {
+    setActiveDir(dir);
+    onDirectionPress(dir);
+  };
+
+  const handlePressOut = () => {
+    setActiveDir(null);
+    onDirectionRelease();
+  };
+
   return (
-    <View style={styles.padContainer}>
-      <View style={styles.row}>
-        <TouchableOpacity
-          activeOpacity={0.6}
-          style={[styles.btn, styles.dirBtn, disabled && styles.disabledBtn]}
-          disabled={disabled}
-          onPressIn={() => onDirectionPress('forward')}
-          onPressOut={onDirectionRelease}>
-          <Text style={styles.arrowText}>▲</Text>
-          <Text style={styles.dirLabel}>TIẾN</Text>
-        </TouchableOpacity>
-      </View>
+    <View style={styles.outerRing}>
+      <View style={styles.padGrid}>
+        <View style={styles.topRow}>
+          <TouchableOpacity
+            activeOpacity={0.7}
+            style={[
+              styles.dirBtn,
+              activeDir === 'forward' && styles.btnActive,
+              disabled && styles.disabledBtn,
+            ]}
+            disabled={disabled}
+            onPressIn={() => handlePressIn('forward')}
+            onPressOut={handlePressOut}>
+            <Text style={[styles.arrowIcon, activeDir === 'forward' && styles.arrowActive]}>▲</Text>
+            <Text style={[styles.dirText, activeDir === 'forward' && styles.textActive]}>TIẾN</Text>
+          </TouchableOpacity>
+        </View>
 
-      <View style={styles.middleRow}>
-        <TouchableOpacity
-          activeOpacity={0.6}
-          style={[styles.btn, styles.dirBtn, disabled && styles.disabledBtn]}
-          disabled={disabled}
-          onPressIn={() => onDirectionPress('left')}
-          onPressOut={onDirectionRelease}>
-          <Text style={styles.arrowText}>◀</Text>
-          <Text style={styles.dirLabel}>TRÁI</Text>
-        </TouchableOpacity>
+        <View style={styles.midRow}>
+          <TouchableOpacity
+            activeOpacity={0.7}
+            style={[
+              styles.dirBtn,
+              activeDir === 'left' && styles.btnActive,
+              disabled && styles.disabledBtn,
+            ]}
+            disabled={disabled}
+            onPressIn={() => handlePressIn('left')}
+            onPressOut={handlePressOut}>
+            <Text style={[styles.arrowIcon, activeDir === 'left' && styles.arrowActive]}>◀</Text>
+            <Text style={[styles.dirText, activeDir === 'left' && styles.textActive]}>TRÁI</Text>
+          </TouchableOpacity>
 
-        <TouchableOpacity
-          activeOpacity={0.6}
-          style={[styles.btn, styles.stopCenterBtn, disabled && styles.disabledBtn]}
-          disabled={disabled}
-          onPress={onStopPress}>
-          <Text style={styles.stopText}>■</Text>
-          <Text style={styles.stopLabel}>STOP</Text>
-        </TouchableOpacity>
+          <TouchableOpacity
+            activeOpacity={0.7}
+            style={[styles.stopBtn, disabled && styles.disabledBtn]}
+            disabled={disabled}
+            onPress={onStopPress}>
+            <View style={styles.stopInner}>
+              <Text style={styles.stopIcon}>■</Text>
+              <Text style={styles.stopText}>STOP</Text>
+            </View>
+          </TouchableOpacity>
 
-        <TouchableOpacity
-          activeOpacity={0.6}
-          style={[styles.btn, styles.dirBtn, disabled && styles.disabledBtn]}
-          disabled={disabled}
-          onPressIn={() => onDirectionPress('right')}
-          onPressOut={onDirectionRelease}>
-          <Text style={styles.arrowText}>▶</Text>
-          <Text style={styles.dirLabel}>PHẢI</Text>
-        </TouchableOpacity>
-      </View>
+          <TouchableOpacity
+            activeOpacity={0.7}
+            style={[
+              styles.dirBtn,
+              activeDir === 'right' && styles.btnActive,
+              disabled && styles.disabledBtn,
+            ]}
+            disabled={disabled}
+            onPressIn={() => handlePressIn('right')}
+            onPressOut={handlePressOut}>
+            <Text style={[styles.arrowIcon, activeDir === 'right' && styles.arrowActive]}>▶</Text>
+            <Text style={[styles.dirText, activeDir === 'right' && styles.textActive]}>PHẢI</Text>
+          </TouchableOpacity>
+        </View>
 
-      <View style={styles.row}>
-        <TouchableOpacity
-          activeOpacity={0.6}
-          style={[styles.btn, styles.dirBtn, disabled && styles.disabledBtn]}
-          disabled={disabled}
-          onPressIn={() => onDirectionPress('backward')}
-          onPressOut={onDirectionRelease}>
-          <Text style={styles.arrowText}>▼</Text>
-          <Text style={styles.dirLabel}>LÙI</Text>
-        </TouchableOpacity>
+        <View style={styles.botRow}>
+          <TouchableOpacity
+            activeOpacity={0.7}
+            style={[
+              styles.dirBtn,
+              activeDir === 'backward' && styles.btnActive,
+              disabled && styles.disabledBtn,
+            ]}
+            disabled={disabled}
+            onPressIn={() => handlePressIn('backward')}
+            onPressOut={handlePressOut}>
+            <Text style={[styles.arrowIcon, activeDir === 'backward' && styles.arrowActive]}>▼</Text>
+            <Text style={[styles.dirText, activeDir === 'backward' && styles.textActive]}>LÙI</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  padContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 10,
-  },
-  row: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-  },
-  middleRow: {
-    flexDirection: 'row',
+  outerRing: {
+    width: 290,
+    height: 290,
+    borderRadius: 145,
+    backgroundColor: '#14171F',
+    borderWidth: 2,
+    borderColor: '#242B38',
     justifyContent: 'center',
     alignItems: 'center',
-    marginVertical: 8,
+    elevation: 8,
   },
-  btn: {
-    width: 84,
-    height: 84,
-    borderRadius: 18,
+  padGrid: {
+    width: 260,
+    height: 260,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: 6,
+  },
+  topRow: {
+    alignItems: 'center',
+  },
+  midRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: '100%',
+    paddingHorizontal: 6,
+  },
+  botRow: {
+    alignItems: 'center',
+  },
+  dirBtn: {
+    width: 76,
+    height: 76,
+    borderRadius: 20,
+    backgroundColor: '#1B212D',
+    borderWidth: 1.5,
+    borderColor: '#2E384A',
     justifyContent: 'center',
     alignItems: 'center',
     elevation: 4,
-    borderWidth: 1.5,
   },
-  dirBtn: {
-    backgroundColor: '#263238',
-    borderColor: '#455A64',
-    marginHorizontal: 8,
+  btnActive: {
+    backgroundColor: '#00E676',
+    borderColor: '#B9F6CA',
+    elevation: 8,
   },
-  stopCenterBtn: {
-    backgroundColor: '#B71C1C',
-    borderColor: '#FF1744',
-    marginHorizontal: 8,
-  },
-  disabledBtn: {
-    opacity: 0.35,
-  },
-  arrowText: {
-    color: '#00E676',
-    fontSize: 26,
+  arrowIcon: {
+    fontSize: 24,
+    color: '#00E5FF',
     fontWeight: '900',
   },
-  dirLabel: {
+  arrowActive: {
+    color: '#000000',
+  },
+  dirText: {
+    fontSize: 10,
     color: '#ECEFF1',
-    fontSize: 11,
-    fontWeight: '700',
+    fontWeight: '800',
     marginTop: 2,
     letterSpacing: 0.5,
   },
-  stopText: {
-    color: '#FFFFFF',
-    fontSize: 22,
+  textActive: {
+    color: '#000000',
+  },
+  stopBtn: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    backgroundColor: '#3E1017',
+    borderWidth: 2,
+    borderColor: '#FF1744',
+    justifyContent: 'center',
+    alignItems: 'center',
+    elevation: 6,
+  },
+  stopInner: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  stopIcon: {
+    fontSize: 20,
+    color: '#FF1744',
     fontWeight: '900',
   },
-  stopLabel: {
+  stopText: {
+    fontSize: 11,
     color: '#FFFFFF',
-    fontSize: 10,
-    fontWeight: '800',
-    marginTop: 2,
+    fontWeight: '900',
+    letterSpacing: 0.5,
+  },
+  disabledBtn: {
+    opacity: 0.35,
   },
 });

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { useRobotStore } from '../store/robotStore';
 import { RobotApi } from '../services/RobotApi';
 import { ConnectionBadge } from '../components/ConnectionBadge';
@@ -41,11 +41,15 @@ export const DiagnosticsScreen: React.FC = () => {
       <View style={styles.topBar}>
         <ConnectionBadge
           status={connectionStatus}
-          robotName={pairedRobot?.robotName || 'Pi Robot'}
+          robotName={pairedRobot?.robotName || 'RBT01'}
         />
+        <View style={styles.uptimeBadge}>
+          <Text style={styles.uptimeLabel}>UPTIME:</Text>
+          <Text style={styles.uptimeVal}>{formatUptime(telemetry?.uptime)}</Text>
+        </View>
       </View>
 
-      <Text style={styles.sectionHeader}>TRẠNG THÁI HỆ THỐNG</Text>
+      <Text style={styles.sectionHeader}>TRẠNG THÁI HỆ THỐNG AN TOÀN</Text>
       <View style={styles.metricsRow}>
         <MetricCard
           title="ROBOT STATE"
@@ -53,13 +57,13 @@ export const DiagnosticsScreen: React.FC = () => {
           statusColor={robotState === 'SAFETY_STOP' || robotState === 'CAMERA_ERROR' ? '#FF1744' : '#00E676'}
         />
         <MetricCard
-          title="SAFETY STATE"
+          title="SAFETY LOCK"
           value={safetyState}
           statusColor={safetyState !== 'CLEAR' ? '#FF9100' : '#00E676'}
         />
       </View>
 
-      <Text style={styles.sectionHeader}>HIỆU NĂNG PHẦN CỨNG PI 4</Text>
+      <Text style={styles.sectionHeader}>PHẦN CỨNG & NHIỆT ĐỘ PI 4</Text>
       <View style={styles.metricsRow}>
         <MetricCard
           title="CPU TEMP"
@@ -68,7 +72,7 @@ export const DiagnosticsScreen: React.FC = () => {
           statusColor={telemetry?.cpuTemp && telemetry.cpuTemp > 70 ? '#FF1744' : '#00E676'}
         />
         <MetricCard
-          title="CPU USAGE"
+          title="CPU LOAD"
           value={telemetry?.cpuUsage ? Math.round(telemetry.cpuUsage).toString() : '--'}
           unit="%"
         />
@@ -79,7 +83,7 @@ export const DiagnosticsScreen: React.FC = () => {
         />
       </View>
 
-      <Text style={styles.sectionHeader}>THỊ GIÁC & AI</Text>
+      <Text style={styles.sectionHeader}>THỊ GIÁC CSI & AI DETECTOR</Text>
       <View style={styles.metricsRow}>
         <MetricCard
           title="CAMERA FPS"
@@ -92,13 +96,13 @@ export const DiagnosticsScreen: React.FC = () => {
           unit="fps"
         />
         <MetricCard
-          title="NGƯỜI"
+          title="SAFETY ZONE"
           value={telemetry?.personDetected ? 'PHÁT HIỆN' : 'TRỐNG'}
           statusColor={telemetry?.personDetected ? '#FF1744' : '#00E676'}
         />
       </View>
 
-      <Text style={styles.sectionHeader}>OUTPUT 4 ĐỘNG CƠ</Text>
+      <Text style={styles.sectionHeader}>CÔNG SUẤT 4 ĐỘNG CƠ (TB6612FNG)</Text>
       <View style={styles.metricsRow}>
         <MetricCard title="M1 (L-FWD)" value={`${Math.round((telemetry?.m1 || 0) * 100)}%`} />
         <MetricCard title="M2 (L-REV)" value={`${Math.round((telemetry?.m2 || 0) * 100)}%`} />
@@ -106,7 +110,7 @@ export const DiagnosticsScreen: React.FC = () => {
         <MetricCard title="M4 (R-REV)" value={`${Math.round((telemetry?.m4 || 0) * 100)}%`} />
       </View>
 
-      <Text style={styles.sectionHeader}>THÔNG TIN MẠNG & UPTIME</Text>
+      <Text style={styles.sectionHeader}>THÔNG TIN KẾT NỐI MẠNG</Text>
       <View style={styles.infoCard}>
         <View style={styles.infoRow}>
           <Text style={styles.infoKey}>Robot ID / Tên:</Text>
@@ -117,12 +121,12 @@ export const DiagnosticsScreen: React.FC = () => {
           <Text style={styles.infoVal}>{pairedRobot?.host || '--'}:{pairedRobot?.port || 8765}</Text>
         </View>
         <View style={styles.infoRow}>
-          <Text style={styles.infoKey}>Thời gian chạy (Uptime):</Text>
-          <Text style={styles.infoVal}>{formatUptime(telemetry?.uptime)}</Text>
+          <Text style={styles.infoKey}>Giao Thức Điều Khiển:</Text>
+          <Text style={styles.infoVal}>P1 WebSocket (350ms Lease)</Text>
         </View>
       </View>
 
-      <Text style={styles.sectionHeader}>LOGS HỆ THỐNG GẦN ĐÂY</Text>
+      <Text style={styles.sectionHeader}>NHẬT KÝ HỆ THỐNG (SYSTEM EVENT LOG)</Text>
       <View style={styles.logBox}>
         {displayLogs.length === 0 ? (
           <Text style={styles.emptyLog}>Chưa có log mới</Text>
@@ -141,20 +145,44 @@ export const DiagnosticsScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0F0F12',
+    backgroundColor: '#0A0D14',
   },
   content: {
     padding: 16,
     paddingBottom: 36,
   },
   topBar: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     marginBottom: 8,
   },
-  sectionHeader: {
+  uptimeBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#141822',
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#242B38',
+    gap: 6,
+  },
+  uptimeLabel: {
     color: '#8E8E93',
-    fontSize: 11,
+    fontSize: 10,
     fontWeight: '800',
-    letterSpacing: 0.5,
+  },
+  uptimeVal: {
+    color: '#00E5FF',
+    fontSize: 11,
+    fontWeight: '900',
+  },
+  sectionHeader: {
+    color: '#00E5FF',
+    fontSize: 10,
+    fontWeight: '900',
+    letterSpacing: 1,
     marginTop: 14,
     marginBottom: 6,
   },
@@ -164,11 +192,11 @@ const styles = StyleSheet.create({
     marginHorizontal: -4,
   },
   infoCard: {
-    backgroundColor: '#1C1C1E',
-    borderRadius: 12,
-    padding: 12,
-    borderWidth: 1,
-    borderColor: '#2C2C2E',
+    backgroundColor: '#141822',
+    borderRadius: 14,
+    padding: 14,
+    borderWidth: 1.5,
+    borderColor: '#242B38',
   },
   infoRow: {
     flexDirection: 'row',
@@ -178,19 +206,20 @@ const styles = StyleSheet.create({
   infoKey: {
     color: '#8E8E93',
     fontSize: 12,
+    fontWeight: '600',
   },
   infoVal: {
     color: '#ECEFF1',
     fontSize: 12,
-    fontWeight: '700',
+    fontWeight: '800',
   },
   logBox: {
-    backgroundColor: '#121214',
-    borderRadius: 12,
+    backgroundColor: '#0E121A',
+    borderRadius: 14,
     padding: 12,
-    borderWidth: 1,
-    borderColor: '#2C2C2E',
-    maxHeight: 200,
+    borderWidth: 1.5,
+    borderColor: '#1E2535',
+    maxHeight: 220,
   },
   logLine: {
     color: '#00E676',

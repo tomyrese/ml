@@ -23,8 +23,8 @@ export const SafetyBanner: React.FC<Props> = ({
   if (isEmergencyStopped || safetyState === 'ERROR_STOP') {
     return (
       <View style={[styles.banner, styles.dangerBanner]}>
-        <Text style={styles.bannerTitle}>⚠️ DỪNG KHẨN CẤP (EMERGENCY STOP)</Text>
-        <Text style={styles.bannerSubtitle}>Động cơ đã ngắt toàn bộ. Hãy reset sau khi khu vực an toàn.</Text>
+        <Text style={styles.bannerTitle}>🛑 DỪNG KHẨN CẤP (EMERGENCY ACTIVE)</Text>
+        <Text style={styles.bannerSubtitle}>Động cơ đã ngắt toàn bộ nguồn. Hãy reset sau khi khu vực an toàn.</Text>
       </View>
     );
   }
@@ -34,7 +34,7 @@ export const SafetyBanner: React.FC<Props> = ({
     return (
       <View style={[styles.banner, styles.warningBanner]}>
         <Text style={styles.bannerTitle}>⚠️ PHÁT HIỆN NGƯỜI PHÍA TRƯỚC ({confPercent}%)</Text>
-        <Text style={styles.bannerSubtitle}>ROBOT ĐÃ TỰ ĐỘNG DỪNG. Khóa di chuyển đang kích hoạt.</Text>
+        <Text style={styles.bannerSubtitle}>ROBOT ĐÃ TỰ ĐỘNG DỪNG. Khóa di chuyển an toàn đang kích hoạt.</Text>
       </View>
     );
   }
@@ -42,8 +42,8 @@ export const SafetyBanner: React.FC<Props> = ({
   if (robotState === 'CAMERA_ERROR') {
     return (
       <View style={[styles.banner, styles.dangerBanner]}>
-        <Text style={styles.bannerTitle}>⚠️ LỖI CAMERA CSI</Text>
-        <Text style={styles.bannerSubtitle}>Mất luồng camera an toàn. Khóa di chuyển robot.</Text>
+        <Text style={styles.bannerTitle}>📷 LỖI CAMERA CSI AN TOÀN</Text>
+        <Text style={styles.bannerSubtitle}>Mất luồng camera an toàn. Khóa di chuyển robot tự động.</Text>
       </View>
     );
   }
@@ -51,44 +51,75 @@ export const SafetyBanner: React.FC<Props> = ({
   if (connectionStatus !== 'CONNECTED') {
     return (
       <View style={[styles.banner, styles.disconnectedBanner]}>
-        <Text style={styles.bannerTitle}>⚠️ MẤT KẾT NỐI VỚI ROBOT</Text>
-        <Text style={styles.bannerSubtitle}>Robot đã dừng an toàn. Đang chờ kết nối lại...</Text>
+        <Text style={styles.bannerTitle}>📡 MẤT KẾT NỐI WEBSOCKET ROBOT</Text>
+        <Text style={styles.bannerSubtitle}>Robot đã dừng an toàn (Fail-Safe Stop). Đang chờ kết nối lại...</Text>
       </View>
     );
   }
 
-  return null;
+  return (
+    <View style={styles.clearBanner}>
+      <View style={styles.clearDot} />
+      <Text style={styles.clearText}>HỆ THỐNG AN TOÀN SẴN SÀNG (ALL CLEAR)</Text>
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({
   banner: {
-    paddingVertical: 10,
+    paddingVertical: 12,
     paddingHorizontal: 16,
-    borderRadius: 8,
+    borderRadius: 14,
     marginVertical: 6,
-    borderWidth: 1,
+    borderWidth: 1.5,
+    elevation: 4,
   },
   dangerBanner: {
-    backgroundColor: '#4A0E0E',
+    backgroundColor: '#350A10',
     borderColor: '#FF1744',
   },
   warningBanner: {
-    backgroundColor: '#4A3B00',
-    borderColor: '#FFD600',
+    backgroundColor: '#382205',
+    borderColor: '#FFB300',
   },
   disconnectedBanner: {
-    backgroundColor: '#301824',
+    backgroundColor: '#261224',
     borderColor: '#E040FB',
   },
-  bannerTitle: {
-    color: '#FFFFFF',
-    fontSize: 14,
+  clearBanner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#0E1718',
+    borderColor: '#19392C',
+    borderWidth: 1,
+    paddingVertical: 8,
+    paddingHorizontal: 14,
+    borderRadius: 10,
+    marginVertical: 4,
+    gap: 8,
+  },
+  clearDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: '#00E676',
+  },
+  clearText: {
+    color: '#81C784',
+    fontSize: 11,
     fontWeight: '800',
     letterSpacing: 0.5,
   },
+  bannerTitle: {
+    color: '#FFFFFF',
+    fontSize: 13,
+    fontWeight: '900',
+    letterSpacing: 0.5,
+  },
   bannerSubtitle: {
-    color: '#E0E0E0',
-    fontSize: 12,
-    marginTop: 2,
+    color: '#ECEFF1',
+    fontSize: 11,
+    marginTop: 3,
+    lineHeight: 16,
   },
 });

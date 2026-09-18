@@ -7,22 +7,27 @@ import { ConnectionBadge } from '../components/ConnectionBadge';
 import { RobotSocket } from '../services/RobotSocket';
 
 export const CameraScreen: React.FC = () => {
-  const { connectionStatus, pairedRobot, telemetry, personDetected } = useRobotStore();
+  const { connectionStatus, pairedRobot, telemetry, personDetected, personConfidence } = useRobotStore();
 
   const handleEmergencyStop = () => {
     RobotSocket.getInstance().sendEmergencyStop();
   };
+
+  const camFps = telemetry ? `${telemetry.cameraFps.toFixed(1)} FPS` : '0.0 FPS';
+  const infFps = telemetry ? `${telemetry.inferenceFps.toFixed(1)} FPS` : '0.0 FPS';
+  const confText = personDetected ? `${Math.round(personConfidence * 100)}%` : 'CLEAR';
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
       <View style={styles.topBar}>
         <ConnectionBadge
           status={connectionStatus}
-          robotName={pairedRobot?.robotName || 'Pi Robot'}
+          robotName={pairedRobot?.robotName || 'RBT01'}
         />
-        <Text style={styles.fpsText}>
-          {telemetry ? `${telemetry.cameraFps.toFixed(1)} FPS` : '0.0 FPS'}
-        </Text>
+        <View style={styles.fpsBadge}>
+          <Text style={styles.fpsLabel}>LIVE FEED:</Text>
+          <Text style={styles.fpsValue}>{camFps}</Text>
+        </View>
       </View>
 
       {pairedRobot ? (
@@ -44,19 +49,39 @@ export const CameraScreen: React.FC = () => {
       )}
 
       <View style={styles.metaCard}>
-        <Text style={styles.metaTitle}>THÔNG TIN LUỒNG THỊ GIÁC CSI</Text>
-        <View style={styles.metaRow}>
-          <Text style={styles.metaLabel}>Camera Backend:</Text>
-          <Text style={styles.metaVal}>Picamera2 / libcamera (Pi 4)</Text>
+        <View style={styles.cardHeader}>
+          <Text style={styles.metaTitle}>VISION PIPELINE & AI STATUS</Text>
+          <View style={[styles.aiPill, personDetected ? styles.aiPillAlert : styles.aiPillSafe]}>
+            <Text style={styles.aiPillText}>
+              {personDetected ? 'PERSON IN ZONE' : 'SAFETY CLEAR'}
+            </Text>
+          </View>
         </View>
+
         <View style={styles.metaRow}>
-          <Text style={styles.metaLabel}>AI Person Detector:</Text>
-          <Text style={styles.metaVal}>SSD MobileNet V2 Quantized</Text>
+          <Text style={styles.metaLabel}>Camera Hardware:</Text>
+          <Text style={styles.metaVal}>Raspberry Pi CSI (Picamera2)</Text>
         </View>
+
         <View style={styles.metaRow}>
-          <Text style={styles.metaLabel}>AI Inference Speed:</Text>
-          <Text style={styles.metaVal}>
-            {telemetry ? `${telemetry.inferenceFps.toFixed(1)} FPS` : '--'}
+          <Text style={styles.metaLabel}>Capture Resolution:</Text>
+          <Text style={styles.metaVal}>640x480 @ 30 FPS</Text>
+        </View>
+
+        <View style={styles.metaRow}>
+          <Text style={styles.metaLabel}>AI Vision Model:</Text>
+          <Text style={styles.metaVal}>SSD MobileNet V2 COCO INT8</Text>
+        </View>
+
+        <View style={styles.metaRow}>
+          <Text style={styles.metaLabel}>Inference Speed:</Text>
+          <Text style={styles.metaVal}>{infFps}</Text>
+        </View>
+
+        <View style={styles.metaRow}>
+          <Text style={styles.metaLabel}>Person Confidence:</Text>
+          <Text style={[styles.metaVal, personDetected ? styles.confAlert : styles.confSafe]}>
+            {confText}
           </Text>
         </View>
       </View>
@@ -71,7 +96,7 @@ export const CameraScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0F0F12',
+    backgroundColor: '#0A0D14',
   },
   content: {
     padding: 16,
@@ -83,41 +108,88 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 12,
   },
-  fpsText: {
-    color: '#00E676',
+  fpsBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#141822',
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#242B38',
+    gap: 6,
+  },
+  fpsLabel: {
+    color: '#8E8E93',
+    fontSize: 10,
     fontWeight: '800',
-    fontSize: 14,
+  },
+  fpsValue: {
+    color: '#00E676',
+    fontWeight: '900',
+    fontSize: 12,
   },
   streamContainer: {
     alignItems: 'center',
-    marginBottom: 16,
+    marginBottom: 14,
   },
   noRobotBox: {
     height: 240,
-    backgroundColor: '#1C1C1E',
-    borderRadius: 14,
+    backgroundColor: '#141822',
+    borderRadius: 16,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 16,
+    borderWidth: 1.5,
+    borderColor: '#242B38',
   },
   noRobotText: {
     color: '#8E8E93',
-    fontSize: 14,
+    fontSize: 13,
+    fontWeight: '700',
   },
   metaCard: {
-    backgroundColor: '#1C1C1E',
-    borderRadius: 14,
+    backgroundColor: '#141822',
+    borderRadius: 16,
     padding: 14,
-    borderWidth: 1,
-    borderColor: '#2C2C2E',
-    marginBottom: 16,
+    borderWidth: 1.5,
+    borderColor: '#242B38',
+    marginBottom: 14,
+    elevation: 3,
+  },
+  cardHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#1E2535',
+    paddingBottom: 8,
   },
   metaTitle: {
-    color: '#8E8E93',
+    color: '#00E5FF',
     fontSize: 11,
-    fontWeight: '800',
-    letterSpacing: 0.5,
-    marginBottom: 8,
+    fontWeight: '900',
+    letterSpacing: 0.8,
+  },
+  aiPill: {
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+    borderRadius: 6,
+    borderWidth: 1,
+  },
+  aiPillSafe: {
+    backgroundColor: '#0A2518',
+    borderColor: '#00E676',
+  },
+  aiPillAlert: {
+    backgroundColor: '#250A10',
+    borderColor: '#FF1744',
+  },
+  aiPillText: {
+    color: '#ECEFF1',
+    fontSize: 9,
+    fontWeight: '900',
   },
   metaRow: {
     flexDirection: 'row',
@@ -125,15 +197,22 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
   },
   metaLabel: {
-    color: '#ECEFF1',
-    fontSize: 12,
-  },
-  metaVal: {
-    color: '#00E676',
+    color: '#8E8E93',
     fontSize: 12,
     fontWeight: '700',
   },
+  metaVal: {
+    color: '#ECEFF1',
+    fontSize: 12,
+    fontWeight: '800',
+  },
+  confSafe: {
+    color: '#00E676',
+  },
+  confAlert: {
+    color: '#FF1744',
+  },
   emergencyWrapper: {
-    marginTop: 8,
+    marginTop: 6,
   },
 });

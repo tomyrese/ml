@@ -91,9 +91,12 @@ export const ControlScreen: React.FC<Props> = ({ navigation }) => {
       <View style={styles.topBar}>
         <ConnectionBadge
           status={connectionStatus}
-          robotName={pairedRobot?.robotName || 'Pi Robot'}
+          robotName={pairedRobot?.robotName || 'RBT01'}
         />
-        <Text style={styles.motionStateText}>TRẠNG THÁI: {robotState}</Text>
+        <View style={styles.statePill}>
+          <Text style={styles.stateLabel}>MOTION:</Text>
+          <Text style={styles.stateValue}>{robotState}</Text>
+        </View>
       </View>
 
       <SafetyBanner
@@ -138,8 +141,8 @@ export const ControlScreen: React.FC<Props> = ({ navigation }) => {
         <EmergencyButton onPress={handleEmergencyStop} />
 
         {isEmergencyStopped && (
-          <TouchableOpacity style={styles.resetBtn} onPress={handleResetEmergency}>
-            <Text style={styles.resetBtnText}>🔄 RESET EMERGENCY STOP</Text>
+          <TouchableOpacity activeOpacity={0.8} style={styles.resetBtn} onPress={handleResetEmergency}>
+            <Text style={styles.resetBtnText}>🔄 MỞ KHÓA E-STOP (RESET)</Text>
           </TouchableOpacity>
         )}
       </View>
@@ -150,7 +153,7 @@ export const ControlScreen: React.FC<Props> = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0F0F12',
+    backgroundColor: '#0A0D14',
   },
   content: {
     padding: 16,
@@ -162,33 +165,52 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 8,
   },
-  motionStateText: {
+  statePill: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#141822',
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#242B38',
+    gap: 6,
+  },
+  stateLabel: {
     color: '#8E8E93',
-    fontSize: 12,
-    fontWeight: '700',
+    fontSize: 10,
+    fontWeight: '800',
+    letterSpacing: 0.5,
+  },
+  stateValue: {
+    color: '#00E5FF',
+    fontSize: 11,
+    fontWeight: '900',
   },
   previewBox: {
     marginVertical: 4,
   },
   padWrapper: {
-    marginVertical: 8,
+    marginVertical: 10,
     alignItems: 'center',
+    justifyContent: 'center',
   },
   bottomActions: {
     marginTop: 8,
     gap: 8,
   },
   resetBtn: {
-    backgroundColor: '#2E7D32',
+    backgroundColor: '#1B5E20',
     paddingVertical: 14,
-    borderRadius: 12,
+    borderRadius: 14,
     alignItems: 'center',
-    borderWidth: 1,
-    borderColor: '#4CAF50',
+    borderWidth: 1.5,
+    borderColor: '#00E676',
+    elevation: 4,
   },
   resetBtnText: {
     color: '#FFFFFF',
-    fontWeight: '800',
+    fontWeight: '900',
     fontSize: 14,
     letterSpacing: 0.5,
   },

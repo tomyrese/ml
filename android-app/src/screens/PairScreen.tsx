@@ -13,6 +13,7 @@ import { useRobotStore, updateGlobalState } from '../store/robotStore';
 import { RobotApi } from '../services/RobotApi';
 import { RobotSocket } from '../services/RobotSocket';
 import { StorageService } from '../services/StorageService';
+import { RobotLogo } from '../components/RobotLogo';
 
 interface Props {
   navigation: any;
@@ -94,22 +95,38 @@ export const PairScreen: React.FC<Props> = ({ navigation }) => {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.robotLogo}>🤖</Text>
+        <View style={styles.logoWrap}>
+          <RobotLogo size={80} />
+        </View>
         <Text style={styles.appTitle}>PI ROBOT CONTROLLER</Text>
-        <Text style={styles.subTitle}>Hệ Thống Điều Khiển Robot Tự Hành</Text>
+        <Text style={styles.subTitle}>Raspberry Pi 4 Autonomous Platform</Text>
       </View>
 
       <View style={styles.card}>
-        <Text style={styles.cardTitle}>TRẠNG THÁI KẾT NỐI</Text>
-        <Text style={styles.statusText}>{connectionStatus}</Text>
+        <View style={styles.cardHeader}>
+          <Text style={styles.cardTitle}>HỆ THỐNG GHÉP NỐI AN TOÀN</Text>
+          <View style={[
+            styles.statusPill,
+            connectionStatus === 'CONNECTED' ? styles.statusOnline : styles.statusOffline
+          ]}>
+            <Text style={styles.statusPillText}>{connectionStatus}</Text>
+          </View>
+        </View>
 
-        {pairedRobot && (
+        {pairedRobot ? (
           <View style={styles.pairedInfo}>
-            <Text style={styles.infoLabel}>Robot Đã Ghép Nối:</Text>
+            <Text style={styles.infoLabel}>Robot Đã Ghép Nối Trước Đó:</Text>
             <Text style={styles.infoValue}>
-              {pairedRobot.robotName} ({pairedRobot.host}:{pairedRobot.port})
+              {pairedRobot.robotName}
+            </Text>
+            <Text style={styles.infoIp}>
+              {pairedRobot.host}:{pairedRobot.port}
             </Text>
           </View>
+        ) : (
+          <Text style={styles.emptyInfo}>
+            Chưa ghép nối thiết bị. Hãy quét mã QR đang hiển thị trên màn hình OLED 1.3" của Robot.
+          </Text>
         )}
       </View>
 
@@ -120,13 +137,13 @@ export const PairScreen: React.FC<Props> = ({ navigation }) => {
       ) : null}
 
       <View style={styles.actions}>
-        <TouchableOpacity style={styles.primaryBtn} onPress={handleScanPress}>
+        <TouchableOpacity activeOpacity={0.8} style={styles.primaryBtn} onPress={handleScanPress}>
           <Text style={styles.primaryBtnText}>📷 QUÉT MÃ QR TRÊN OLED</Text>
         </TouchableOpacity>
 
         {pairedRobot && (
-          <TouchableOpacity style={styles.secondaryBtn} onPress={handleReconnect}>
-            <Text style={styles.secondaryBtnText}>🔄 KẾT NỐI LẠI</Text>
+          <TouchableOpacity activeOpacity={0.8} style={styles.secondaryBtn} onPress={handleReconnect}>
+            <Text style={styles.secondaryBtnText}>🔄 KẾT NỐI LẠI NGAY</Text>
           </TouchableOpacity>
         )}
 
@@ -202,81 +219,111 @@ export const PairScreen: React.FC<Props> = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    backgroundColor: '#0F0F12',
+    backgroundColor: '#0A0D14',
     padding: 20,
     justifyContent: 'center',
   },
   header: {
     alignItems: 'center',
-    marginBottom: 28,
+    marginBottom: 26,
   },
-  robotLogo: {
-    fontSize: 54,
-    marginBottom: 8,
+  logoWrap: {
+    marginBottom: 14,
   },
   appTitle: {
-    color: '#00E676',
+    color: '#00E5FF',
     fontSize: 22,
     fontWeight: '900',
-    letterSpacing: 1,
+    letterSpacing: 1.5,
   },
   subTitle: {
     color: '#8E8E93',
-    fontSize: 13,
+    fontSize: 12,
     marginTop: 4,
+    fontWeight: '600',
   },
   card: {
-    backgroundColor: '#1C1C1E',
-    borderRadius: 16,
+    backgroundColor: '#141822',
+    borderRadius: 18,
     padding: 18,
-    marginBottom: 24,
-    borderWidth: 1,
-    borderColor: '#2C2C2E',
+    marginBottom: 20,
+    borderWidth: 1.5,
+    borderColor: '#242B3A',
+    elevation: 4,
+  },
+  cardHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
   },
   cardTitle: {
     color: '#8E8E93',
-    fontSize: 11,
+    fontSize: 10,
     fontWeight: '800',
+    letterSpacing: 0.8,
+  },
+  statusPill: {
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 6,
+    borderWidth: 1,
+  },
+  statusOnline: {
+    backgroundColor: '#0A2518',
+    borderColor: '#00E676',
+  },
+  statusOffline: {
+    backgroundColor: '#250A10',
+    borderColor: '#FF1744',
+  },
+  statusPillText: {
+    color: '#ECEFF1',
+    fontSize: 9,
+    fontWeight: '900',
     letterSpacing: 0.5,
   },
-  statusText: {
-    color: '#00E676',
-    fontSize: 18,
-    fontWeight: '800',
-    marginTop: 6,
-  },
   pairedInfo: {
-    marginTop: 12,
-    alignItems: 'center',
+    marginTop: 14,
     borderTopWidth: 1,
-    borderTopColor: '#2C2C2E',
-    paddingTop: 10,
-    width: '100%',
+    borderTopColor: '#1E2535',
+    paddingTop: 12,
   },
   infoLabel: {
     color: '#8E8E93',
-    fontSize: 12,
+    fontSize: 11,
+    fontWeight: '600',
   },
   infoValue: {
     color: '#FFFFFF',
-    fontSize: 14,
+    fontSize: 16,
+    fontWeight: '900',
+    marginTop: 2,
+  },
+  infoIp: {
+    color: '#00E5FF',
+    fontSize: 13,
     fontWeight: '700',
     marginTop: 2,
+  },
+  emptyInfo: {
+    color: '#78909C',
+    fontSize: 12,
+    marginTop: 12,
+    lineHeight: 18,
   },
   errorBanner: {
     backgroundColor: 'rgba(255, 23, 68, 0.15)',
     borderColor: '#FF1744',
     borderWidth: 1,
-    borderRadius: 10,
+    borderRadius: 12,
     padding: 12,
     marginBottom: 16,
   },
   errorBannerText: {
     color: '#FF5252',
-    fontSize: 13,
+    fontSize: 12,
     textAlign: 'center',
-    fontWeight: '600',
+    fontWeight: '700',
   },
   actions: {
     gap: 12,
@@ -284,27 +331,29 @@ const styles = StyleSheet.create({
   primaryBtn: {
     backgroundColor: '#00E676',
     paddingVertical: 16,
-    borderRadius: 14,
+    borderRadius: 16,
     alignItems: 'center',
+    elevation: 6,
   },
   primaryBtnText: {
     color: '#000000',
     fontSize: 15,
-    fontWeight: '800',
+    fontWeight: '900',
     letterSpacing: 0.5,
   },
   secondaryBtn: {
-    backgroundColor: '#2C2C2E',
+    backgroundColor: '#1E2535',
     paddingVertical: 14,
-    borderRadius: 14,
+    borderRadius: 16,
     alignItems: 'center',
-    borderWidth: 1,
-    borderColor: '#3A3A3C',
+    borderWidth: 1.5,
+    borderColor: '#00E5FF',
   },
   secondaryBtnText: {
-    color: '#00E676',
+    color: '#00E5FF',
     fontSize: 14,
-    fontWeight: '800',
+    fontWeight: '900',
+    letterSpacing: 0.5,
   },
   textBtn: {
     alignItems: 'center',
@@ -312,51 +361,56 @@ const styles = StyleSheet.create({
   },
   textBtnLabel: {
     color: '#8E8E93',
-    fontSize: 13,
+    fontSize: 12,
+    fontWeight: '700',
     textDecorationLine: 'underline',
   },
   modalBackdrop: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.75)',
+    backgroundColor: 'rgba(0,0,0,0.8)',
     justifyContent: 'center',
     padding: 20,
   },
   modalCard: {
-    backgroundColor: '#1C1C1E',
-    borderRadius: 16,
-    padding: 20,
-    borderWidth: 1,
-    borderColor: '#3A3A3C',
+    backgroundColor: '#141822',
+    borderRadius: 20,
+    padding: 22,
+    borderWidth: 1.5,
+    borderColor: '#2E384D',
   },
   modalTitle: {
-    color: '#00E676',
-    fontSize: 16,
-    fontWeight: '800',
+    color: '#00E5FF',
+    fontSize: 17,
+    fontWeight: '900',
     marginBottom: 14,
     textAlign: 'center',
+    letterSpacing: 0.5,
   },
   errorText: {
     color: '#FF1744',
     fontSize: 12,
     marginBottom: 10,
     textAlign: 'center',
+    fontWeight: '700',
   },
   inputLabel: {
     color: '#8E8E93',
-    fontSize: 12,
-    fontWeight: '700',
+    fontSize: 11,
+    fontWeight: '800',
     marginTop: 8,
     marginBottom: 4,
+    letterSpacing: 0.5,
   },
   input: {
-    backgroundColor: '#121214',
-    borderRadius: 8,
+    backgroundColor: '#0A0D14',
+    borderRadius: 10,
     borderWidth: 1,
-    borderColor: '#3A3A3C',
+    borderColor: '#2E384D',
     color: '#FFF',
     paddingHorizontal: 12,
     paddingVertical: 10,
     fontSize: 14,
+    fontWeight: '600',
   },
   modalButtons: {
     flexDirection: 'row',
@@ -366,24 +420,24 @@ const styles = StyleSheet.create({
   },
   cancelBtn: {
     flex: 1,
-    backgroundColor: '#2C2C2E',
+    backgroundColor: '#242B3A',
     paddingVertical: 12,
-    borderRadius: 10,
+    borderRadius: 12,
     alignItems: 'center',
   },
   cancelBtnText: {
     color: '#FFF',
-    fontWeight: '700',
+    fontWeight: '800',
   },
   confirmBtn: {
     flex: 1,
     backgroundColor: '#00E676',
     paddingVertical: 12,
-    borderRadius: 10,
+    borderRadius: 12,
     alignItems: 'center',
   },
   confirmBtnText: {
     color: '#000',
-    fontWeight: '800',
+    fontWeight: '900',
   },
 });
