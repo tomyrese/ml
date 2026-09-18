@@ -61,12 +61,22 @@ class PersonDetector:
 
     def _init_tflite(self, model_path: str):
         try:
+            tflite_module = None
             try:
-                import tflite_runtime.interpreter as tflite
+                import tflite_runtime.interpreter as tflite_module
             except ImportError:
-                import tensorflow.lite as tflite
+                try:
+                    import ai_edge_litert.interpreter as tflite_module
+                except ImportError:
+                    try:
+                        import tensorflow.lite as tflite_module
+                    except ImportError:
+                        pass
 
-            self.interpreter = tflite.Interpreter(model_path=model_path, num_threads=4)
+            if tflite_module is None:
+                raise ImportError("No tflite_runtime, ai_edge_litert, or tensorflow.lite found")
+
+            self.interpreter = tflite_module.Interpreter(model_path=model_path, num_threads=4)
             self.interpreter.allocate_tensors()
             self.input_details = self.interpreter.get_input_details()
             self.output_details = self.interpreter.get_output_details()
